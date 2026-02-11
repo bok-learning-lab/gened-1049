@@ -1,0 +1,194 @@
+/* Font configuration - Inter for all text, monospace for code */
+body,
+.mdx-content {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6,
+.mdx-content p,
+.mdx-content li,
+.mdx-content blockquote,
+.mdx-content td,
+.mdx-content th {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Print styles - force light mode when printing */
+@media print {
+  :root,
+  .dark {
+    /* Override all theme variables to light mode values */
+    --color-background: hsl(0 0% 100%) !important;
+    --color-foreground: hsl(0 0% 3.9%) !important;
+    --color-card: hsl(0 0% 100%) !important;
+    --color-card-foreground: hsl(0 0% 3.9%) !important;
+    --color-popover: hsl(0 0% 100%) !important;
+    --color-popover-foreground: hsl(0 0% 3.9%) !important;
+    --color-primary: hsl(0 0% 9%) !important;
+    --color-primary-foreground: hsl(0 0% 98%) !important;
+    --color-secondary: hsl(0 0% 96.1%) !important;
+    --color-secondary-foreground: hsl(0 0% 9%) !important;
+    --color-muted: hsl(0 0% 96.1%) !important;
+    --color-muted-foreground: hsl(0 0% 45.1%) !important;
+    --color-accent: hsl(0 0% 96.1%) !important;
+    --color-accent-foreground: hsl(0 0% 9%) !important;
+    --color-border: hsl(0 0% 89.8%) !important;
+    --color-input: hsl(0 0% 89.8%) !important;
+    --color-ring: hsl(0 0% 3.9%) !important;
+
+    /* Force light backgrounds and dark text */
+    background-color: white !important;
+    color: black !important;
+  }
+
+  body,
+  div,
+  section,
+  article,
+  main {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* Ensure readability for print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* MDX Code Styling */
+.mdx-content pre {
+  background-color: hsl(0 0% 96.1%);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.dark .mdx-content pre {
+  background-color: hsl(0 0% 10%);
+}
+
+.mdx-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+}
+
+.mdx-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.mdx-content :not(pre) > code {
+  background-color: hsl(0 0% 96.1%);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+  border: 1px solid var(--color-border);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.dark .mdx-content :not(pre) > code {
+  background-color: hsl(0 0% 14.9%);
+}
+
+/* Ensure sidebar and navigation use Inter */
+aside,
+nav,
+button,
+.sidebar {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Ensure proper paragraph spacing */
+.mdx-content p {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+
+.mdx-content p:first-child {
+  margin-top: 0;
+}
+
+.mdx-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure list items have proper spacing and styling */
+.mdx-content ul {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+  list-style-type: disc;
+}
+
+.mdx-content ol {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+  padding-left: 1.625em;
+  list-style-type: decimal;
+}
+
+.mdx-content li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 0.375em;
+}
+
+.mdx-content ul ul {
+  list-style-type: circle;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.mdx-content ul ul ul {
+  list-style-type: square;
+}
+
+/* Headings styling and spacing */
+.mdx-content h1 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 1em;
+  letter-spacing: -0.025em;
+}
+
+.mdx-content h2 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  letter-spacing: -0.025em;
+}
+
+.mdx-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  letter-spacing: -0.025em;
+}
+
+.mdx-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
