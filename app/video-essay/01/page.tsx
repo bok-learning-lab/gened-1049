@@ -1,6 +1,50 @@
-/Users/mk/Development/gened-1049/app/[folder]"use client";
+"use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { ScrollVideo } from "@/components/ScrollVideo";
+import { EditingOverlay } from "./EditingOverlay";
+
+const FullscreenButton = () => {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const onChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onChange);
+    return () => document.removeEventListener("fullscreenchange", onChange);
+  }, []);
+
+  const toggle = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  }, []);
+
+  return (
+    <button
+      onClick={toggle}
+      className="fixed top-4 right-4 z-50 p-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 backdrop-blur-sm transition-all duration-200 group"
+      title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+    >
+      {isFullscreen ? (
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/40 group-hover:text-white/70 transition-colors">
+          <polyline points="4 14 10 14 10 20" />
+          <polyline points="20 10 14 10 14 4" />
+          <line x1="14" y1="10" x2="21" y2="3" />
+          <line x1="3" y1="21" x2="10" y2="14" />
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/40 group-hover:text-white/70 transition-colors">
+          <polyline points="15 3 21 3 21 9" />
+          <polyline points="9 21 3 21 3 15" />
+          <line x1="21" y1="3" x2="14" y2="10" />
+          <line x1="3" y1="21" x2="10" y2="14" />
+        </svg>
+      )}
+    </button>
+  );
+};
 
 const clips = [
   {
@@ -108,10 +152,11 @@ const clips = [
 const VideoEssayPage = () => {
   return (
     <div className="min-h-screen bg-black text-white">
+      <FullscreenButton />
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6">
         <div className="max-w-4xl text-center space-y-6">
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-orange-300 via-amber-400 to-red-400 bg-clip-text text-transparent">
             Shot by Shot: The Grammar of Emotional Escalation
           </h1>
           <p className="text-xl md:text-2xl text-gray-300">
@@ -134,7 +179,7 @@ const VideoEssayPage = () => {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-blue-400"
+              className="text-orange-400"
             >
               <path d="m6 9 6 6 6-6" />
             </svg>
@@ -144,36 +189,23 @@ const VideoEssayPage = () => {
       </section>
 
       {clips.map((clip, index) => (
-        <section key={`clip-section-${clip.id}`} className="px-6 py-24">
+        <section key={`clip-section-${clip.id}`}>
           <ScrollVideo
             videoSrc={clip.src}
-            containerClassName="h-[200vh]"
-            stickyClassName="top-24"
-            renderContent={({ video }) => (
-              <div className="mx-auto h-[60vh] lg:h-[70vh] max-w-6xl grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-12 items-center">
-                <div className="h-full order-2 lg:order-1" key={`${clip.id}-video`}>
-                  <div className="h-full rounded-3xl border border-gray-800 shadow-2xl overflow-hidden">{video}</div>
-                </div>
-                <div className="order-1 lg:order-2 space-y-6 text-center lg:text-left" key={`${clip.id}-text`}>
-                  <div className="flex items-center gap-3 justify-center lg:justify-start">
-                    <span className="text-sm uppercase tracking-[0.4em] text-blue-400">
-                      Shot {index + 1} of 7
-                    </span>
-                    <span className="text-xs text-gray-500">•</span>
-                    <span className="text-xs uppercase tracking-wider text-gray-500">
-                      {clip.shotType}
-                    </span>
-                  </div>
-                  <div className="space-y-4">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white">{clip.title}</h2>
-                    <p className="text-lg md:text-xl text-gray-300">{clip.summary}</p>
-                  </div>
-                  <div className="grid gap-4 text-sm text-gray-400">
-                    {clip.notes.map((note, noteIndex) => (
-                      <p key={`${clip.id}-note-${noteIndex}`}>{note}</p>
-                    ))}
-                  </div>
-                </div>
+            containerClassName="h-[400vh]"
+            stickyClassName="top-0"
+            renderContent={({ video, scrollProgress }) => (
+              <div className="relative h-screen w-full">
+                <div className="absolute inset-0">{video}</div>
+                <EditingOverlay
+                  shotNumber={index + 1}
+                  totalShots={clips.length}
+                  shotType={clip.shotType}
+                  title={clip.title}
+                  summary={clip.summary}
+                  notes={clip.notes}
+                  scrollProgress={scrollProgress}
+                />
               </div>
             )}
           />
@@ -184,7 +216,7 @@ const VideoEssayPage = () => {
       <section className="min-h-screen flex items-center justify-center px-6 py-24">
         <div className="max-w-4xl space-y-12">
           <h2 className="text-4xl md:text-6xl font-bold text-center">
-            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-400 via-amber-400 to-orange-300 bg-clip-text text-transparent">
               The Invisible Architecture of Emotion
             </span>
           </h2>

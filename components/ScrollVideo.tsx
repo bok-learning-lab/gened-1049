@@ -28,6 +28,7 @@ interface ScrollVideoProps {
     video: React.ReactNode;
     isVideoLoaded: boolean;
     hadError: boolean;
+    scrollProgress: number;
   }) => React.ReactNode;
 }
 
@@ -46,6 +47,7 @@ export const ScrollVideo = ({
   const targetTimeRef = useRef(0);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const [isActive, setIsActive] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const resolvedSources = useMemo(() => {
     const providedSources =
@@ -107,6 +109,8 @@ export const ScrollVideo = ({
       const scrollDistance = scrollStart - scrollEnd;
       const currentScroll = containerTop - scrollEnd;
       const scrollProgress = Math.max(0, Math.min(1, 1 - currentScroll / scrollDistance));
+
+      setScrollProgress(scrollProgress);
 
       // Set video time based on scroll progress
       if (video.duration) {
@@ -218,7 +222,7 @@ export const ScrollVideo = ({
   return (
     <div ref={containerRef} className={cn("relative h-[300vh]", containerClassName)}>
       <div className={cn("sticky top-0 h-screen", stickyClassName)}>
-        {renderContent ? renderContent({ video: videoNode, isVideoLoaded, hadError }) : videoNode}
+        {renderContent ? renderContent({ video: videoNode, isVideoLoaded, hadError, scrollProgress }) : videoNode}
       </div>
     </div>
   );
